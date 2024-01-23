@@ -1,0 +1,31 @@
+name: Setup ASDF Tools
+description: Loads ASDF tools, installing them if not cached
+outputs:
+  cache-hit:
+    description: "Whether the ASDF cache was hit"
+    value: ${{ steps.asdf-cache.outputs-cache-hit }}
+runs:
+  using: composite
+  steps:
+    # cache the ASDF directory, using values from .tool-versions
+    - name: ASDF Tools Cache
+      uses: actions/cache@v3
+      id: asdf-cache
+      with:
+        path: ~/.asdf
+        # runner.os vs CACHE_UUID secret
+        key: ${{ runner.os}}-asdf-${{ hashFiles('**/.tool-versions') }}
+
+    - name: Install ASDF Tools
+      uses: asdf-vm/actions/install@v2
+      if: steps.asdf-cache.outputs.cache-hit != 'true'
+
+    - name: Re-shim ASDF Install
+      shell: bash
+      run: |
+        ASDF_DIR=$HOME/.asdf
+        echo "ASDF_DIR=$ASDF_DIR" >> $GITHUB_ENV
+        echo "ASDF_DATA_DIR=$ASDF_DIR" >> $GITHUB_ENV
+        echo "$ASDF_DIR/bin" >> $GITHUB_PATH
+        echo "$ASDF_DIR/shims" >> $GITHUB_PATH
+        $ASDF_DIR/bin/asdf reshim

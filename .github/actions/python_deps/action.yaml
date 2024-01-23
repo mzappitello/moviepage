@@ -1,0 +1,24 @@
+name: Setup Python Dependencies
+description: Loads python dependencies, install them if not cached
+
+runs:
+  using: composite
+  steps:
+    - name: ASDF Tools Install
+      uses: ./.github/actions/tools
+
+    - name: Python Deps Cache
+      uses: actions/cache@v3
+      id: python-cache
+      with:
+        path: |
+          ~/.cache/pypoetry
+          **/.venv
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install Python Deps
+      run: |
+        poetry env use python3.10
+        poetry install -v
+      shell: bash
+      if: "!steps.python-cache.outputs.cache-hit"

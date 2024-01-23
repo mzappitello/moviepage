@@ -6,7 +6,7 @@ authors = ["Mike Zappitello <mzappitello@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
-start_flask = "moviepage.app:start_flask"
+save_static_site = "moviepage.app:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"

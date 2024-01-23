@@ -1,13 +1,36 @@
+import argparse
+import os
+
 from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
-def start_flask() -> None:
-    app.run(debug=True)
 
-if __name__ == '__main__':
-    start_flask()
+def save_static_site(output_dir: str = "static_site") -> None:
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    with app.app_context():
+        with open(os.path.join(output_dir, "index.html"), "w") as file:
+            file.write(home())
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Generate static site from Flask app.")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="static_site",
+        help="Output directory for the static site",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    save_static_site(output_dir=args.output_dir)
