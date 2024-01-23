@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "moviepage"
+version = "0.1.0"
+description = "mzapps personal movie homepage"
+authors = ["Mike Zappitello <mzappitello@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+start_flask = "moviepage.app:start_flask"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^3.0.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.12.1"
+mypy = "^1.8.0"
+pylint = "^3.0.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
