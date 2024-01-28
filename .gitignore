@@ -1,2 +1,5 @@
 **.pyc
+
+# files that are auto createad
 static_site/**
+screenings.json

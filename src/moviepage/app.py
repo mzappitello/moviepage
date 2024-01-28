@@ -21,7 +21,9 @@ def save_static_site(output_dir: str = "static_site") -> None:
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Generate static site from Flask app.")
+    parser = argparse.ArgumentParser(
+        description="Generate static site from Flask app."
+    )
     parser.add_argument(
         "--output-dir",
         type=str,
