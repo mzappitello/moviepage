@@ -1,0 +1,39 @@
+name: Pull Screening Information
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Runs at 3 AM EST (8 AM UTC)
+  workflow_dispatch:
+
+concurrency:
+  group: python-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    name: Python Setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/python_deps
+
+  build:
+    name: Pull Screening Information from Theaters
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/python_deps
+
+      - name: Save Screening Data 
+        run: poetry run write_screenings --output-file screenings.json 
+
+      - name: Archive Output
+        run: tar -czf screenings.tar.gz screenings.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenings-archive
+          path: screenings.tar.gz
