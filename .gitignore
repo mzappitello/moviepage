@@ -3,3 +3,4 @@
 # files that are auto createad
 static_site/**
 screenings.json
+src/moviepage/static/

@@ -3,7 +3,7 @@ import os
 
 from flask import Flask, render_template
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 
 @app.route("/")
@@ -23,6 +23,13 @@ def save_static_site(output_dir: str = "static_site") -> None:
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Generate static site from Flask app."
+    )
+
+    parser.add_argument(
+        "--screenings-file",
+        type=str,
+        default="screenings.json",
+        help=
     )
     parser.add_argument(
         "--output-dir",
